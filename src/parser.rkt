@@ -42,10 +42,11 @@
             (precs (left - +))
             (grammar
              (exp ((NUM) $1)
-                  ((exp + exp) (+ $1 $3))
-                  ((exp - exp) (- $1 $3))))))
+                  ((LPAREN + exp exp RPAREN) (+ $3 $4))
+                  ((LPAREN - exp exp RPAREN) (- $3 $4))
+                  ((LPAREN * exp exp RPAREN) (* $3 $4))))))
 
 (define (lex-this lexer input) (lambda () (lexer input)))
 
-(let ((input (open-input-string "3 - 3.3 + 6")))
+(let ((input (open-input-string "(+ 3 (- 2 1))")))
            (lisp-parser (lex-this lisp-lexer input)))
