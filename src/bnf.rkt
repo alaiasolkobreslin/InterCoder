@@ -1,7 +1,11 @@
 #lang brag
 
 expr: NUM
+| ID
 | LPAREN expr RPAREN
 | LPAREN PLUS expr expr RPAREN
 | LPAREN MINUS expr expr RPAREN
 | LPAREN TIMES expr expr RPAREN
+| LPAREN NOT expr RPAREN
+| LPAREN MINUS expr RPAREN
+| LPAREN expr expr RPAREN
