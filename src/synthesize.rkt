@@ -19,18 +19,18 @@
   (plus n1 n2 #:depth 3))
 
 (define (check-plus impl x y)
-  ; (assert (eq? (+ x y)(impl x y))))
-  ; (assert #t))
   (if (and (equal? x 1) (equal? y 2)) 
     (assert (equal? (impl x y) 3)) 
     (assert (equal? 1 1))))
 
-(define (int32 i)
-  (bv i int32?))
 
-; (check-plus + (int32 2) (int32 3))
 
-(define-symbolic l h int32?)
+; (define (int32 i)
+;   (bv i int32?))
+
+(check-plus + 1 2)
+
+(define-symbolic l h integer?)
 
 ; (define sol
 ;     (synthesize
@@ -39,28 +39,9 @@
 
 ; sol
 
-(define cex (verify (check-plus + l h)))
-;(define cex (verify (assert (eq? (int32 1) (int32 1)))))
-; (define cex (verify (begin (assert (eq? (int32 1) (int32 1))))))
+; (define cex (verify (check-plus + l h)))
+; cex
+
+
+(define cex (verify (check-plus + 1 2)))
 cex
-
-
-
-
-; (define (bvmid lo hi)  ; (lo + hi) / 2
-;   (bvsdiv (bvadd lo hi) (int32 2)))
-
-; (define (check-mid impl lo hi)     ; Assuming that
-;   (assume (bvsle (int32 0) lo))    ; 0 ≤ lo and
-;   (assume (bvsle lo hi))           ; lo ≤ hi,
-;   (define mi (impl lo hi))         ; and letting mi = impl(lo, hi) and
-;   (define diff                     ; diff = (hi - mi) - (mi - lo),
-;     (bvsub (bvsub hi mi)
-;            (bvsub mi lo)))         ; we require that
-;   (assert (bvsle lo mi))           ; lo ≤ mi,
-;   (assert (bvsle mi hi))           ; mi ≤ hi,
-;   (assert (bvsle (int32 0) diff))  ; 0 ≤ diff, and
-;   (assert (bvsle diff (int32 1)))) ; diff ≤ 1.
-
-; (define cexx (verify (check-mid bvmid l h)))
-; cexx
