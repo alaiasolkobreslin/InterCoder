@@ -16,9 +16,16 @@
            ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [bop
-   (choose +  -  *)]              ; <bop>  := plus  | minus | times |
+   (choose +  -  * modulo)]              ; <bop>  := plus  | minus | times |
   [uop
    (choose -)])                   ; <uop>  := neg
+
+; (define-grammar (unaryexpr x)     ; Grammar of int expressions over one inputs:
+;   [expr
+;    (choose x                      ; <expr> := x | y |
+;            ((uop) (expr)))]       ;           (<uop> <expr>)
+;   [uop
+;    (choose -)])                   ; <uop>  := neg
 
 (define (plus-interp n1 n2)
   (binexpr n1 n2 #:depth 1))
@@ -28,6 +35,12 @@
 
 (define (times-interp n1 n2)
   (binexpr n1 n2 #:depth 1))
+
+(define (modulo-interp n1 n2)
+  (binexpr n1 n2 #:depth 1))
+
+; (define (neg-interp n1)
+;   (unaryexpr n1 #:depth 1))
 
 (define (assert-bin-examples js impl x y)
   (define examples (hash-ref js 'examples))
@@ -39,6 +52,16 @@
     (if (and (equal? x x-hash) (equal? y y-hash)) 
       (assert (equal? (impl x y) res))
       (assert (equal? 1 1))))) examples))
+
+; (define (assert-unary-examples js impl x y)
+;   (define examples (hash-ref js 'examples))
+;   (map (lambda (ex)
+;     (let ()
+;     (define x-hash (hash-ref ex 'x))
+;     (define res (hash-ref ex 'res))
+;     (if (equal? x x-hash) 
+;       (assert (equal? (impl x) res))
+;       (assert (equal? 1 1))))) examples))
 
 (define (check-plus js impl x y)
   (define plus-examples (hash-ref js 'plus))
@@ -52,6 +75,14 @@
   (define minus-examples (hash-ref js 'times))
   (assert-bin-examples minus-examples impl x y))
 
+; (define (check-neg js impl x)
+;   (define neg-examples (hash-ref js 'neg))
+;   (assert-unary-examples neg-examples impl x))
+
+(define (check-modulo js impl x y)
+  (define modulo-examples (hash-ref js 'modulo))
+  (assert-bin-examples modulo-examples impl x y))
+
 (define-symbolic l h integer?)
 
 ; (define file (read-line "examples/normal.json" 'any))
@@ -64,7 +95,9 @@
      #:forall    (list l h)
      #:guarantee (and (check-plus contents plus-interp l h) 
      (check-minus contents minus-interp l h) 
-     (check-times contents times-interp l h))))
+     (check-times contents times-interp l h)
+     ;(check-neg contents neg-interp l)
+     (check-modulo contents modulo-interp l h))))
 
 sol
 (print-forms sol)
