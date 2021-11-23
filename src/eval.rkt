@@ -28,20 +28,20 @@
   [uop
    (choose - !)])                 ; <uop>  := neg
 
-(define (plus-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (plus-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (minus-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (minus-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (times-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (times-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (modulo-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (modulo-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (neg-interp n1)
-  (unaryexpr n1 #:depth 1))
+(define (neg-interp depth n1)
+  (unaryexpr n1 #:depth depth))
 
 (define (assert-bin-examples js impl x y)
   (define examples (hash-ref js 'examples))
@@ -52,7 +52,7 @@
     (define y-hash (hash-ref ex 'y)) 
     (define res (hash-ref ex 'res))
     (if (and (equal? x x-hash) (equal? y y-hash)) 
-      (assert (equal? (impl x y) res))
+      (assert (equal? (impl depth x y) res))
       (assert (equal? 1 1))))) examples))
 
 (define (assert-unary-examples js impl x)
@@ -63,7 +63,7 @@
     (define x-hash (hash-ref ex 'x))
     (define res (hash-ref ex 'res))
     (if (equal? x x-hash) 
-      (assert (equal? (impl x) res))
+      (assert (equal? (impl depth x) res))
       (assert (equal? 1 1))))) examples))
 
 (define (check-plus js impl x y)
@@ -106,14 +106,15 @@
 sol
 (print-forms sol)
 
+; calling interp with depth = 1 is a placeholder for now
 (define (eval e)
   (match e
     [(num i) i]
-    [(plus e1 e2) (evaluate (plus-interp (eval e1) (eval e2)) sol)]
-    [(minus e1 e2) (evaluate (minus-interp (eval e1) (eval e2)) sol)]
-    [(times e1 e2) (evaluate (times-interp (eval e1) (eval e2)) sol)]
-    [(modu e1 e2) (evaluate (modulo-interp (eval e1) (eval e2)) sol)]
-    [(neg e1) (evaluate (neg-interp (eval e1)) sol)]))
+    [(plus e1 e2) (evaluate (plus-interp 1 (eval e1) (eval e2)) sol)]
+    [(minus e1 e2) (evaluate (minus-interp 1 (eval e1) (eval e2)) sol)]
+    [(times e1 e2) (evaluate (times-interp 1 (eval e1) (eval e2)) sol)]
+    [(modu e1 e2) (evaluate (modulo-interp 1 (eval e1) (eval e2)) sol)]
+    [(neg e1) (evaluate (neg-interp 1 (eval e1)) sol)]))
 
 (define expr (plus (minus (num 10)(num 2)) (num 2)))
 (eval expr)
