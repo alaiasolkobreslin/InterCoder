@@ -16,7 +16,7 @@
            ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [bop
-   (choose +  -  * modulo)]              ; <bop>  := plus  | minus | times |
+   (choose +  -  * modulo)]       ; <bop>  := plus  | minus | times |
   [uop
    (choose -)])                   ; <uop>  := neg
 
@@ -25,42 +25,44 @@
    (choose x                      ; <expr> := x | y |
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [uop
-   (choose - !)])                   ; <uop>  := neg
+   (choose - !)])                 ; <uop>  := neg
 
-(define (plus-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (plus-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (minus-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (minus-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (times-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (times-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (modulo-interp n1 n2)
-  (binexpr n1 n2 #:depth 1))
+(define (modulo-interp depth n1 n2)
+  (binexpr n1 n2 #:depth depth))
 
-(define (neg-interp n1)
-  (unaryexpr n1 #:depth 1))
+(define (neg-interp depth n1)
+  (unaryexpr n1 #:depth depth))
 
 (define (assert-bin-examples js impl x y)
   (define examples (hash-ref js 'examples))
+  (define depth (hash-ref js 'depth))
   (map (lambda (ex)
     (let ()
     (define x-hash (hash-ref ex 'x))
     (define y-hash (hash-ref ex 'y)) 
     (define res (hash-ref ex 'res))
     (if (and (equal? x x-hash) (equal? y y-hash)) 
-      (assert (equal? (impl x y) res))
+      (assert (equal? (impl depth x y) res))
       (assert (equal? 1 1))))) examples))
 
 (define (assert-unary-examples js impl x)
   (define examples (hash-ref js 'examples))
+  (define depth (hash-ref js 'depth))
   (map (lambda (ex)
     (let ()
     (define x-hash (hash-ref ex 'x))
     (define res (hash-ref ex 'res))
     (if (equal? x x-hash) 
-      (assert (equal? (impl x) res))
+      (assert (equal? (impl depth x) res))
       (assert (equal? 1 1))))) examples))
 
 (define (check-plus js impl x y)
