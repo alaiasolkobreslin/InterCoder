@@ -108,8 +108,6 @@
 (define (naur-interp depth n1)
   (boolunaryexpr n1 #:depth depth))
 
-
-
 (define (assert-bin-examples js impl x y)
   (define examples (hash-ref js 'examples))
   (define depth (hash-ref js 'depth))
@@ -138,7 +136,8 @@
   (define depth (hash-ref js 'depth))
   (map (lambda (ex)
     (let ()
-    (define x-hash (hash-ref ex 'x))
+    (define x-hash_ (hash-ref ex 'x))
+    (define x-hash (equal? x-hash_ "true"))
     (define res_ (hash-ref ex 'res))
     (define res (equal? res_ "true"))
     (if (equal? x x-hash) 
@@ -193,8 +192,8 @@
       (check-minus contents minus-interp l h) 
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
-      ;;; (check-modulo contents modulo-interp l h))))
       (check-naur contents naur-interp a))))
+      ;;; (check-modulo contents modulo-interp l h))))
       ;;; (check-and contents and-interp a b)
       ;;; (check-or contents or-interp a b)
 
