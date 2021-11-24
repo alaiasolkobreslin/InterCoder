@@ -47,7 +47,7 @@
   [expr
    (choose x                      ; <expr> := x | y |
           ;;;  ((thrup) (expr) (expr) (expr))
-           ((bop) (expr) (expr))
+           (bop (expr) (expr))
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [uop
    (choose !)]                 ; <uop>  := neg
@@ -60,7 +60,7 @@
   [expr
    (choose x y                    ; <expr> := x | y |
           ;;;  ((thrup) (expr) (expr) (expr))
-           ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
+           (bop (expr) (expr))  ;           (<bop> <expr> <expr>) |
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [uop
    (choose !)]                   ; <uop>  := neg
@@ -146,13 +146,13 @@
   (define naur-examples (hash-ref js 'naur))
   (assert-unary-examples naur-examples impl x))
 
-;;; (define (check-and js impl x y)
-;;;   (define and-examples (hash-ref js 'and))
-;;;   (assert-bin-examples and-examples impl x y))
+(define (check-and js impl x y)
+  (define and-examples (hash-ref js 'and))
+  (assert-bin-examples and-examples impl x y))
 
-;;; (define (check-or js impl x y)
-;;;   (define or-examples (hash-ref js 'or))
-;;;   (assert-bin-examples or-examples impl x y))
+(define (check-or js impl x y)
+  (define or-examples (hash-ref js 'or))
+  (assert-bin-examples or-examples impl x y))
 
 (define (check-minus js impl x y)
   (define minus-examples (hash-ref js 'minus))
@@ -180,16 +180,16 @@
 
 (define sol
     (synthesize
-     #:forall    (list l h a)
+     #:forall    (list l h a b)
      #:guarantee (and 
       (check-plus contents plus-interp l h) 
       (check-minus contents minus-interp l h) 
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
       (check-naur contents naur-interp a)
-      (check-modulo contents modulo-interp l h))))
-      ;;; (check-and contents and-interp a b)
-      ;;; (check-or contents or-interp a b)
+      (check-modulo contents modulo-interp l h)
+      (check-and contents and-interp a b)
+      (check-or contents or-interp a b))))
 
 sol
 (print-forms sol)
