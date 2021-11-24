@@ -95,5 +95,58 @@
         "res": 6
       }
     ]
+  },
+  "and": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "y": "false",
+        "res": "false"
+      },
+      {
+        "x": "true",
+        "y": "true",
+        "res": "true"
+      },
+      {
+        "x": "false",
+        "y": "false",
+        "res": "false"
+      }
+    ]
+  },
+  "or": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "y": "false",
+        "res": "true"
+      },
+      {
+        "x": "true",
+        "y": "true",
+        "res": "true"
+      },
+      {
+        "x": "false",
+        "y": "false",
+        "res": "false"
+      }
+    ]
+  },
+  "naur": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "res": "false"
+      },
+      {
+        "x": "false",
+        "res": "true"
+      }
+    ]
   }
 }
