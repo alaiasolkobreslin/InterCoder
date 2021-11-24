@@ -52,7 +52,7 @@
   [uop
    (choose !)]                 ; <uop>  := neg
   [bop
-   (choose (and) (or))])      ; <bop>  := plus  | minus | times |
+   (choose && ||)])      ; <bop>  := plus  | minus | times |
   ;;; [thrup 
   ;;;   (choose + - *)])
 
@@ -187,9 +187,9 @@
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
       (check-naur contents naur-interp a)
-      (check-modulo contents modulo-interp l h)
-      (check-and contents and-interp a b)
-      (check-or contents or-interp a b))))
+      (check-modulo contents modulo-interp l h))))
+      ; (check-and contents and-interp a b)
+      ; (check-or contents or-interp a b))))
 
 sol
 (print-forms sol)

@@ -133,6 +133,11 @@
         "x": "false",
         "y": "false",
         "res": "false"
+      },
+      {
+        "x": "false",
+        "y": "true",
+        "res": "true"
       }
     ]
   },
