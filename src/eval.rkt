@@ -47,12 +47,12 @@
   [expr
    (choose x                      ; <expr> := x | y |
           ;;;  ((thrup) (expr) (expr) (expr))
-          ;;;  ((bop) (expr) (expr))
+           ((bop) (expr) (expr))
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [uop
-   (choose !)])                 ; <uop>  := neg
-  ;;; [bop
-  ;;;  (choose and or)])      ; <bop>  := plus  | minus | times |
+   (choose !)]                 ; <uop>  := neg
+  [bop
+   (choose (and) (or))])      ; <bop>  := plus  | minus | times |
   ;;; [thrup 
   ;;;   (choose + - *)])
 
@@ -60,12 +60,12 @@
   [expr
    (choose x y                    ; <expr> := x | y |
           ;;;  ((thrup) (expr) (expr) (expr))
-          ;;;  ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
+           ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
            ((uop) (expr)))]       ;           (<uop> <expr>)
   [uop
-   (choose !)])                   ; <uop>  := neg
-  ;;; [bop
-  ;;;  (choose and or)])      ; <bop>  := plus  | minus | times |
+   (choose !)]                   ; <uop>  := neg
+  [bop
+   (choose (and) (or))])      ; <bop>  := plus  | minus | times |
   ;;; [thrup 
   ;;;   (choose + - *)])
 
@@ -114,10 +114,13 @@
   (map (lambda (ex)
     (let ()
     (define x-hash (hash-ref ex 'x))
-    (define y-hash (hash-ref ex 'y)) 
+    (define x-hash_ (if (or (equal? x-hash "true") (equal? x-hash "false")) (equal? x-hash "true") x-hash))
+    (define y-hash (hash-ref ex 'y))
+    (define y-hash_ (if (or (equal? y-hash "true") (equal? y-hash "false")) (equal? y-hash "true") y-hash))
     (define res (hash-ref ex 'res))
-    (if (and (equal? x x-hash) (equal? y y-hash)) 
-      (assert (equal? (impl depth x y) res))
+    (define res_ (if (or (equal? res "true") (equal? res "false")) (equal? res "true") res))
+    (if (and (equal? x x-hash_) (equal? y y-hash_)) 
+      (assert (equal? (impl depth x y) res_))
       (assert (equal? 1 1))))) examples))
 
 (define (assert-unary-examples js impl x)
@@ -126,23 +129,14 @@
   (map (lambda (ex)
     (let ()
     (define x-hash (hash-ref ex 'x))
+    (define x-hash_ (if (or (equal? x-hash "true") (equal? x-hash "false")) (equal? x-hash "true") x-hash))
     (define res (hash-ref ex 'res))
-    (if (equal? x x-hash) 
-      (assert (equal? (impl depth x) res))
+    (define res_ (if (or (equal? res "true") (equal? res "false")) (equal? res "true") res))
+
+    (if (equal? x x-hash_) 
+      (assert (equal? (impl depth x) res_))
       (assert (equal? 1 1))))) examples))
 
-(define (assert-bunary-examples js impl x)
-  (define examples (hash-ref js 'examples))
-  (define depth (hash-ref js 'depth))
-  (map (lambda (ex)
-    (let ()
-    (define x-hash_ (hash-ref ex 'x))
-    (define x-hash (equal? x-hash_ "true"))
-    (define res_ (hash-ref ex 'res))
-    (define res (equal? res_ "true"))
-    (if (equal? x x-hash) 
-      (assert (equal? (impl depth x) res))
-      (assert (equal? 1 1))))) examples))
 
 (define (check-plus js impl x y)
   (define plus-examples (hash-ref js 'plus))
@@ -150,7 +144,7 @@
 
 (define (check-naur js impl x)
   (define naur-examples (hash-ref js 'naur))
-  (assert-bunary-examples naur-examples impl x))
+  (assert-unary-examples naur-examples impl x))
 
 ;;; (define (check-and js impl x y)
 ;;;   (define and-examples (hash-ref js 'and))
@@ -192,8 +186,8 @@
       (check-minus contents minus-interp l h) 
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
-      (check-naur contents naur-interp a))))
-      ;;; (check-modulo contents modulo-interp l h))))
+      (check-naur contents naur-interp a)
+      (check-modulo contents modulo-interp l h))))
       ;;; (check-and contents and-interp a b)
       ;;; (check-or contents or-interp a b)
 
