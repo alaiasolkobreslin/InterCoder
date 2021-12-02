@@ -68,6 +68,8 @@
   [expr
    (choose x y
           ;;;  ((thrup) (expr) (expr) (expr))
+           (and (expr) (expr))
+           (or (expr) (expr))
            (bop (expr) (expr))
            ((uop) (expr)))]
   [uop
@@ -218,9 +220,9 @@
       (check-neg contents neg-interp l)
       (check-naur contents naur-interp a)
       (check-if contents if-interp a l h)
-      (check-modulo contents modulo-interp l h))))
-      ; (check-and contents and-interp a b)
-      ; (check-or contents or-interp a b))))
+      (check-modulo contents modulo-interp l h)
+      (check-and contents and-interp a b)
+      (check-or contents or-interp a b))))
 
 sol
 (print-forms sol)
