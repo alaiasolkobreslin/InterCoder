@@ -14,34 +14,35 @@
 (struct times (e1 e2))
 (struct modu (e1 e2))
 (struct neg (e))
-(struct tern (e1 e2 e3))
+(struct iffy (e1 e2 e3))
+; (struct def (pat e1 e2))
 
 
 (define-grammar (intunaryexpr x)
   [expr
    (choose x
-          ;;;  ((thrup) (expr) (expr) (expr))
+           ((thrup) (expr) (expr) (expr))
            ((bop) (expr) (expr))
            ((uop) (expr)))]
   [uop
    (choose - )]
   [bop
-   (choose +  -  * modulo)])
-  ;;; [thrup 
-  ;;;   (choose + - *)])
+   (choose +  -  * modulo)]
+  [thrup 
+    (choose + - *)])
 
 (define-grammar (intbinexpr x y)
   [expr
    (choose x y
-          ;;;  ((thrup) (expr) (expr) (expr))
+           ((thrup) (expr) (expr) (expr))
            ((bop) (expr) (expr))
            ((uop) (expr)))]
   [uop
    (choose - )]
   [bop
-   (choose +  -  * modulo)])
-  ;;; [thrup 
-  ;;;   (choose + - *)])
+   (choose +  -  * modulo)]
+  [thrup 
+    (choose + - *)])
 
 (define-grammar (intternaryexpr x y z)
   [expr
@@ -240,7 +241,11 @@ sol
     [(plus e1 e2) (evaluate (plus-interp 1 (eval e1) (eval e2)) sol)]
     [(minus e1 e2) (evaluate (minus-interp 1 (eval e1) (eval e2)) sol)]
     [(times e1 e2) (evaluate (times-interp 1 (eval e1) (eval e2)) sol)]
-    [(modu e1 e2) (evaluate (modulo-interp 1 (eval e1) (eval e2)) sol)]))
+    [(modu e1 e2) (evaluate (modulo-interp 1 (eval e1) (eval e2)) sol)]
+    [(iffy e1 e2 e3) (evaluate (if-interp 1 (eval e1) (eval e2) (eval e3)) sol)]))
 
 (define expr (plus (minus (num 10) (num 2)) (num 2)))
 (eval expr)
+
+(define expr2 (iffy (bool true) (num 1) (num 2)))
+(eval expr2)
