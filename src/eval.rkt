@@ -17,66 +17,65 @@
 (struct tern (e1 e2 e3))
 
 
-(define-grammar (intunaryexpr x)     ; Grammar of int expressions over one inputs:
+(define-grammar (intunaryexpr x)
   [expr
-   (choose x                      ; <expr> := x | y |
+   (choose x
           ;;;  ((thrup) (expr) (expr) (expr))
            ((bop) (expr) (expr))
-           ((uop) (expr)))]       ;           (<uop> <expr>)
+           ((uop) (expr)))]
   [uop
-   (choose - )]                 ; <uop>  := neg
+   (choose - )]
   [bop
-   (choose +  -  * modulo)])      ; <bop>  := plus  | minus | times |
+   (choose +  -  * modulo)])
   ;;; [thrup 
   ;;;   (choose + - *)])
 
-(define-grammar (intbinexpr x y)     ; Grammar of int expressions over two inputs:
+(define-grammar (intbinexpr x y)
   [expr
-   (choose x y                    ; <expr> := x | y |
+   (choose x y
           ;;;  ((thrup) (expr) (expr) (expr))
-           ((bop) (expr) (expr))  ;           (<bop> <expr> <expr>) |
-           ((uop) (expr)))]       ;           (<uop> <expr>)
+           ((bop) (expr) (expr))
+           ((uop) (expr)))]
   [uop
-   (choose - )]                   ; <uop>  := neg
+   (choose - )]
   [bop
-   (choose +  -  * modulo)])      ; <bop>  := plus  | minus | times |
+   (choose +  -  * modulo)])
   ;;; [thrup 
   ;;;   (choose + - *)])
 
-(define-grammar (intternaryexpr x y z)     ; Grammar of int expressions over one inputs:
+(define-grammar (intternaryexpr x y z)
   [expr
-   (choose x y z                      ; <expr> := x | y |
+   (choose x y z
            (if (expr) (expr) (expr))
-           ((uop) (expr)))]       ;           (<uop> <expr>)
+           ((uop) (expr)))]
   [uop
-   (choose !)])                 ; <uop>  := neg
+   (choose !)])
 
-(define-grammar (boolunaryexpr x)     ; Grammar of int expressions over one inputs:
+(define-grammar (boolunaryexpr x)
   [expr
-   (choose x                      ; <expr> := x | y |
+   (choose x
           ;;;  ((thrup) (expr) (expr) (expr))
            (bop (expr) (expr))
-           ((uop) (expr)))]       ;           (<uop> <expr>)
+           ((uop) (expr)))]
   [uop
-   (choose !)]                 ; <uop>  := neg
+   (choose !)] 
   [bop
-   (choose && ||)])      ; <bop>  := plus  | minus | times |
+   (choose && ||)])
   ;;; [thrup 
   ;;;   (choose + - *)])
 
-(define-grammar (boolbinexpr x y)     ; Grammar of int expressions over two inputs:
+(define-grammar (boolbinexpr x y)
   [expr
-   (choose x y                    ; <expr> := x | y |
+   (choose x y
           ;;;  ((thrup) (expr) (expr) (expr))
-           (bop (expr) (expr))  ;           (<bop> <expr> <expr>) |
-           ((uop) (expr)))]       ;           (<uop> <expr>)
+           (bop (expr) (expr))
+           ((uop) (expr)))]
   [uop
-   (choose !)]                   ; <uop>  := neg
+   (choose !)]
   [bop
-   (choose (and) (or))])      ; <bop>  := plus  | minus | times |
+   (choose (and) (or))])
   ;;; [thrup 
   ;;;   (choose + - *)])
-
 
 
 ;;; (define-grammar (triexpr x y z)     ; Grammar of int expressions over two inputs:
