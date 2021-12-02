@@ -43,6 +43,14 @@
   ;;; [thrup 
   ;;;   (choose + - *)])
 
+(define-grammar (intternaryexpr x y z)     ; Grammar of int expressions over one inputs:
+  [expr
+   (choose x y z                      ; <expr> := x | y |
+           (if (expr) (expr) (expr))
+           ((uop) (expr)))]       ;           (<uop> <expr>)
+  [uop
+   (choose !)])                 ; <uop>  := neg
+
 (define-grammar (boolunaryexpr x)     ; Grammar of int expressions over one inputs:
   [expr
    (choose x                      ; <expr> := x | y |
@@ -108,6 +116,9 @@
 (define (naur-interp depth n1)
   (boolunaryexpr n1 #:depth depth))
 
+(define (if-interp depth b n1 n2)
+  (intternaryexpr b n1 n2 #:depth depth))
+
 (define (assert-bin-examples js impl x y)
   (define examples (hash-ref js 'examples))
   (define depth (hash-ref js 'depth))
@@ -132,9 +143,25 @@
     (define x-hash_ (if (or (equal? x-hash "true") (equal? x-hash "false")) (equal? x-hash "true") x-hash))
     (define res (hash-ref ex 'res))
     (define res_ (if (or (equal? res "true") (equal? res "false")) (equal? res "true") res))
-
     (if (equal? x x-hash_) 
       (assert (equal? (impl depth x) res_))
+      (assert (equal? 1 1))))) examples))
+
+(define (assert-ternary-examples js impl x y z)
+  (define examples (hash-ref js 'examples))
+  (define depth (hash-ref js 'depth))
+  (map (lambda (ex)
+    (let ()
+    (define x-hash (hash-ref ex 'x))
+    (define x-hash_ (if (or (equal? x-hash "true") (equal? x-hash "false")) (equal? x-hash "true") x-hash))
+    (define y-hash (hash-ref ex 'y))
+    (define y-hash_ (if (or (equal? y-hash "true") (equal? y-hash "false")) (equal? y-hash "true") y-hash))
+    (define z-hash (hash-ref ex 'z))
+    (define z-hash_ (if (or (equal? z-hash "true") (equal? z-hash "false")) (equal? z-hash "true") z-hash))
+    (define res (hash-ref ex 'res))
+    (define res_ (if (or (equal? res "true") (equal? res "false")) (equal? res "true") res))
+    (if (and (equal? x x-hash_) (equal? y y-hash_) (equal? z z-hash_)) 
+      (assert (equal? (impl depth x y z) res_))
       (assert (equal? 1 1))))) examples))
 
 
@@ -170,6 +197,10 @@
   (define modulo-examples (hash-ref js 'modulo))
   (assert-bin-examples modulo-examples impl x y))
 
+(define (check-if js impl x y z)
+  (define if-examples (hash-ref js 'if))
+  (assert-ternary-examples if-examples impl x y z))
+
 (define-symbolic l h integer?)
 (define-symbolic a b boolean?)
 
@@ -187,6 +218,7 @@
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
       (check-naur contents naur-interp a)
+      (check-if contents if-interp a l h)
       (check-modulo contents modulo-interp l h))))
       ; (check-and contents and-interp a b)
       ; (check-or contents or-interp a b))))
