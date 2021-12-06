@@ -1,0 +1,178 @@
+{
+  "plus": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": 1,
+        "y": 3,
+        "res": 8
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "res": 18
+      },
+      {
+        "x": -2,
+        "y": 3,
+        "res": 2
+      }
+    ]
+  },
+  "minus": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": 3,
+        "y": 1,
+        "res": 4
+      },
+      {
+        "x": 9,
+        "y": 2,
+        "res": 14
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "res": 6
+      }
+    ]
+  },
+  "times": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": 5,
+        "y": 3,
+        "res": 30
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "res": 40
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "res": 18
+      }
+    ]
+  },
+  "modulo": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": 3,
+        "y": 2,
+        "res": 2
+      },
+      {
+        "x": 13,
+        "y": 5,
+        "res": 6
+      },
+      {
+        "x": 22,
+        "y": 4,
+        "res": 4
+      }
+    ]
+  },
+  "neg": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": 2,
+        "res": -4
+      },
+      {
+        "x": 4,
+        "res": -8
+      },
+      {
+        "x": -6,
+        "res": 12
+      },
+      {
+        "x": -3,
+        "res": 6
+      }
+    ]
+  },
+  "and": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "y": "false",
+        "res": "false"
+      },
+      {
+        "x": "true",
+        "y": "true",
+        "res": "true"
+      },
+      {
+        "x": "false",
+        "y": "false",
+        "res": "false"
+      }
+    ]
+  },
+  "or": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "y": "false",
+        "res": "true"
+      },
+      {
+        "x": "true",
+        "y": "true",
+        "res": "true"
+      },
+      {
+        "x": "false",
+        "y": "false",
+        "res": "false"
+      },
+      {
+        "x": "false",
+        "y": "true",
+        "res": "true"
+      }
+    ]
+  },
+  "naur": {
+    "depth": 1,
+    "examples": [
+      {
+        "x": "true",
+        "res": "false"
+      },
+      {
+        "x": "false",
+        "res": "true"
+      }
+    ]
+  },
+  "if": {
+    "depth": 2,
+    "examples": [
+      {
+        "x": "true",
+        "y": 1,
+        "z": 4,
+        "res": 2
+      },
+      {
+        "x": "false",
+        "y": 1,
+        "z": 4,
+        "res": 8
+      }
+    ]
+  }
+}

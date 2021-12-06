@@ -21,26 +21,28 @@
 (define-grammar (intunaryexpr x)
   [expr
    (choose x
+           (if (expr) (expr) (expr))
            ((thrup) (expr) (expr) (expr))
            ((bop) (expr) (expr))
            ((uop) (expr)))]
   [uop
-   (choose - )]
+   (choose - !)]
   [bop
-   (choose +  -  * modulo)]
+   (choose +  -  * modulo >= >)]
   [thrup 
     (choose + - *)])
 
 (define-grammar (intbinexpr x y)
   [expr
    (choose x y
+           (if (expr) (expr) (expr))
            ((thrup) (expr) (expr) (expr))
            ((bop) (expr) (expr))
            ((uop) (expr)))]
   [uop
    (choose - )]
   [bop
-   (choose +  -  * modulo)]
+   (choose +  -  * modulo equal?)]
   [thrup 
     (choose + - *)])
 
@@ -48,27 +50,33 @@
   [expr
    (choose x y z
            (if (expr) (expr) (expr))
+           ((thrup) (expr) (expr) (expr))
+           ((bop) (expr) (expr))
            ((uop) (expr)))]
   [uop
-   (choose !)])
+   (choose ! )]
+  [bop
+   (choose +  -  * modulo >= >)]
+  [thrup 
+    (choose + - *)])
 
 (define-grammar (boolunaryexpr x)
   [expr
    (choose x
-          ;;;  ((thrup) (expr) (expr) (expr))
+           ((thrup) (expr) (expr) (expr))
            (bop (expr) (expr))
            ((uop) (expr)))]
   [uop
    (choose !)] 
   [bop
-   (choose && ||)])
-  ;;; [thrup 
-  ;;;   (choose + - *)])
+   (choose && ||)]
+  [thrup 
+    (choose + - *)])
 
 (define-grammar (boolbinexpr x y)
   [expr
    (choose x y
-          ;;;  ((thrup) (expr) (expr) (expr))
+           ((thrup) (expr) (expr) (expr))
            (and (expr) (expr))
            (or (expr) (expr))
            (bop (expr) (expr))
@@ -76,9 +84,9 @@
   [uop
    (choose !)]
   [bop
-   (choose (and) (or))])
-  ;;; [thrup 
-  ;;;   (choose + - *)])
+   (choose && ||)]
+  [thrup 
+    (choose + - *)])
 
 
 ;;; (define-grammar (triexpr x y z)     ; Grammar of int expressions over two inputs:
@@ -206,17 +214,14 @@
 (define-symbolic l h integer?)
 (define-symbolic a b boolean?)
 
-; (define file (read-line "examples/normal.json" 'any))
 (define contents (call-with-input-file "examples/normal.json" read-json))
-
-(check-plus contents + 1 2)
 
 (define sol
     (synthesize
      #:forall    (list l h a b)
      #:guarantee (and 
-      (check-plus contents plus-interp l h) 
-      (check-minus contents minus-interp l h) 
+      (check-plus contents plus-interp l h)
+      (check-minus contents minus-interp l h)
       (check-times contents times-interp l h)
       (check-neg contents neg-interp l)
       (check-naur contents naur-interp a)
